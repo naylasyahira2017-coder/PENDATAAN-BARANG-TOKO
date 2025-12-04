@@ -1,5 +1,4 @@
-nama_toko = "TOKO MAKMUR JAYA"
-print(f"===== SISTEM PENDATAAN {nama_toko} =====")
+nama_toko = "TOKO FALAH ENTERPRISE"
 
 barang_list = [
     {"nama": "Mie Instan", "harga": 3000, "stok": 20},
@@ -9,76 +8,148 @@ barang_list = [
 ]
 
 def tampilkan_barang():
-    print(f"\n===== DATA BARANG {nama_toko} =====")
-    print("| KODE |    NAMA BARANG    |  HARGA  | STOK |")
-    print("---------------------------------------------")
-    for i, b in enumerate(barang_list, start=1):
-        print(f"| {i:<4}| {b['nama']:<17}| Rp.{b['harga']:<6}| {b['stok']:<4}|")
-    print("---------------------------------------------\n")
+    print(f"\n=== DATA BARANG {nama_toko} ===")
+    print("| No | NAMA BARANG | HARGA | STOK |")
+    print("-" * 35)
+    
+    if len(barang_list) == 0:
+        print("Belum ada data barang")
+        return
+    
+    for i, barang in enumerate(barang_list, start=1):
+        print(f"| {i:<2} | {barang['nama']:<10} | Rp{barang['harga']:<6} | {barang['stok']:<4} |")
+    print("-" * 35)
 
 def tambah_barang():
     print("\n=== TAMBAH BARANG ===")
-    nama = input("Nama barang : ").strip()
-    harga = int(input("Harga      : "))
-    stok = int(input("Stok        : "))
+    
+    nama = input("Nama barang : ")
+    
+    while True:
+        harga_input = input("Harga : ")
+        if harga_input.isdigit():
+            harga = int(harga_input)
+            break
+        else:
+            print("Harga harus berupa angka!")
+    
+    while True:
+        stok_input = input("Stok : ")
+        if stok_input.isdigit():
+            stok = int(stok_input)
+            break
+        else:
+            print("Stok harus berupa angka!")
+    
     barang_list.append({"nama": nama, "harga": harga, "stok": stok})
-    print("Barang berhasil ditambahkan!\n")
+    print("Barang berhasil ditambahkan!")
 
 def edit_barang():
+    if len(barang_list) == 0:
+        print("\nBelum ada data barang")
+        return
+    
     tampilkan_barang()
-    kode = int(input("Masukkan kode barang yang ingin diedit: ")) - 1
-    if 0 <= kode < len(barang_list):
-        print("Kosongkan jika tidak ingin mengubah.")
-        nama = input("Nama baru : ")
-        harga = input("Harga baru: ")
-        stok = input("Stok baru : ")
-        if nama != "": barang_list[kode]["nama"] = nama
-        if harga != "": barang_list[kode]["harga"] = int(harga)
-        if stok != "": barang_list[kode]["stok"] = int(stok)
-        print("Data barang berhasil diubah!\n")
+    
+    while True:
+        kode_input = input("\nMasukkan nomor barang yang ingin diedit: ")
+        if kode_input.isdigit():
+            kode = int(kode_input)
+            break
+        else:
+            print("Input harus berupa angka!")
+    
+    if 1 <= kode <= len(barang_list):
+        print("Kosongkan jika tidak ingin mengubah")
+        
+        nama_baru = input("Nama baru : ")
+        if nama_baru != "":
+            barang_list[kode-1]['nama'] = nama_baru
+        
+        harga_baru = input("Harga baru: ")
+        if harga_baru != "" and harga_baru.isdigit():
+            barang_list[kode-1]['harga'] = int(harga_baru)
+        
+        stok_baru = input("Stok baru : ")
+        if stok_baru != "" and stok_baru.isdigit():
+            barang_list[kode-1]['stok'] = int(stok_baru)
+        
+        print("Data barang berhasil diubah!")
     else:
-        print("Kode tidak valid!\n")
+        print("Nomor tidak valid!")
 
 def hapus_barang():
+    if len(barang_list) == 0:
+        print("\nBelum ada data barang")
+        return
+    
     tampilkan_barang()
-    kode = int(input("Masukkan kode barang yang ingin dihapus: ")) - 1
-    if 0 <= kode < len(barang_list):
-        barang_list.pop(kode)
-        print("Barang berhasil dihapus!\n")
+    
+    while True:
+        kode_input = input("\nMasukkan nomor barang yang ingin dihapus: ")
+        if kode_input.isdigit():
+            kode = int(kode_input)
+            break
+        else:
+            print("Input harus berupa angka!")
+    
+    if 1 <= kode <= len(barang_list):
+        barang_list.pop(kode-1)
+        print("Barang berhasil dihapus!")
     else:
-        print("Kode tidak valid!\n")
+        print("Nomor tidak valid!")
 
 def cari_barang():
-    keyword = input("Masukkan kata kunci nama barang: ").lower()
-    print("\n=== HASIL PENCARIAN ===")
-    found = False
-    for b in barang_list:
-        if keyword in b["nama"].lower():
-            print(f"- {b['nama']} | Harga: Rp.{b['harga']} | Stok: {b['stok']}")
-            found = True
-    if not found:
-        print("Barang tidak ditemukan.\n")
-
-while True:
-    print(f"===== MENU {nama_toko} =====")
-    print("1. Tampilkan Barang")
-    print("2. Tambah Barang")
-    print("3. Edit Barang")
-    print("4. Hapus Barang")
-    print("5. Cari Barang")
-    print("6. Keluar")
-
-    pilihan = input("Pilih menu: ")
-
-    if pilihan == "1": tampilkan_barang()
-    elif pilihan == "2": tambah_barang()
-    elif pilihan == "3": edit_barang()
-    elif pilihan == "4": hapus_barang()
-    elif pilihan == "5": cari_barang()
-    elif pilihan == "6":
-        print("Terima kasih telah menggunakan program!")
-        break
+    print("\n=== CARI BARANG ===")
+    
+    if len(barang_list) == 0:
+        print("Belum ada data barang")
+        return
+    
+    cari = input("Cari nama barang: ")
+    
+    hasil = []
+    for barang in barang_list:
+        if cari.lower() in barang['nama'].lower():
+            hasil.append(barang)
+    
+    if len(hasil) > 0:
+        print(f"\nDitemukan {len(hasil)} barang:")
+        print("| No | NAMA BARANG | HARGA | STOK |")
+        print("-" * 35)
+        for i, barang in enumerate(hasil, start=1):
+            print(f"| {i:<2} | {barang['nama']:<10} | Rp{barang['harga']:<6} | {barang['stok']:<4} |")
+        print("-" * 35)
     else:
-        print("Pilihan tidak valid!\n")
+        print("Barang tidak ditemukan")
 
+def menu():
+    while True:
+        print(f"\n===== SISTEM PENDATAAN {nama_toko} =====")
+        print("1. Tampilkan Barang")
+        print("2. Tambah Barang")
+        print("3. Edit Barang")
+        print("4. Hapus Barang")
+        print("5. Cari Barang")
+        print("0. Keluar")
+        
+        pilih = input("Pilih menu: ")
+        
+        if pilih == "1":
+            tampilkan_barang()
+        elif pilih == "2":
+            tambah_barang()
+        elif pilih == "3":
+            edit_barang()
+        elif pilih == "4":
+            hapus_barang()
+        elif pilih == "5":
+            cari_barang()
+        elif pilih == "0":
+            print("\nTerima kasih! Program selesai.")
+            break
+        else:
+            print("Menu tidak valid! Pilih 0-5")
 
+if __name__ == "__main__":
+    menu()
